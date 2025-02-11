@@ -8,7 +8,7 @@ pipeline {
         booleanParam(name: 'ERROR_FILE', description: 'Errors will be sent to a different file than standard metrics.', defaultValue: true)
 
         // Standard log file settings
-        string(name: 'PATH', description: 'Log file location.', defaultValue: '/home/logs/metrics')
+        string(name: 'LOG_PATH', description: 'Log file location.', defaultValue: '/home/logs/metrics')
         string(name: 'FILE_NAME', description: 'Log file name.', defaultValue: 'pic-sure-metrics.json')
         choice(name: 'SHOULD_ROLL_FILE', choices: ['ROLLING_FILE', 'SINGLE_FILE'], description: 'Choose log file mode')
         string(name: 'MAX_FILE_SIZE', description: 'If rolling over, this is the size (in MB) each file should be at its max.', defaultValue: '100')
@@ -52,7 +52,7 @@ pipeline {
                         sh """docker run --name=metrics --restart always \
                                 --network=picsure --network=hpdsNet \
                                 -v \"$DOCKER_CONFIG_DIR\"log/metrics:/home/logs/metrics/ \
-                                -e LOG_PATH=${params.PATH} \
+                                -e LOG_PATH=${params.LOG_PATH} \
                                 -e FILE_NAME=${params.FILE_NAME} \
                                 -e MODE=${params.SHOULD_ROLL_FILE} \
                                 -e MAX_FILE_SIZE=${params.MAX_FILE_SIZE} \
